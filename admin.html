@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Pedidos Zona Pixel</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 20px; background: #f5f7fa; }
+        h1 { color: #0b2b40; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #e0e7ef; }
+        th { background: #0b2b40; color: white; }
+        tr:hover { background: #f8fafd; }
+        .productos-detalle { font-size: 0.9rem; }
+        .total { font-weight: bold; color: #1e6f5c; }
+        .fecha { color: #6c7a89; }
+        button { background: #0b2b40; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; margin-bottom: 20px; }
+        button:hover { background: #1a4a5f; }
+    </style>
+</head>
+<body>
+    <h1>🧾 Pedidos registrados (local)</h1>
+    <button onclick="cargarPedidos()">🔄 Actualizar</button>
+    <table id="tablaPedidos">
+        <thead>
+            <tr><th>ID</th><th>Fecha</th><th>Cliente</th><th>Teléfono</th><th>Dirección</th><th>Productos</th><th>Total</th></tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script>
+        async function cargarPedidos() {
+            try {
+                const res = await fetch('/api/orders');
+                const pedidos = await res.json();
+                const tbody = document.querySelector('#tablaPedidos tbody');
+                tbody.innerHTML = '';
+                pedidos.forEach(p => {
+                    const tr = document.createElement('tr');
+                    const productos = JSON.parse(p.productos);
+                    const productosStr = productos.map(prod => `${prod.nombre} x${prod.cantidad}`).join('<br>');
+                    tr.innerHTML = `
+                        <td>${p.id}</td>
+                        <td class="fecha">${new Date(p.fecha).toLocaleString()}</td>
+                        <td>${p.nombre}</td>
+                        <td>${p.telefono}</td>
+                        <td>${p.direccion}</td>
+                        <td class="productos-detalle">${productosStr}</td>
+                        <td class="total">$${p.total.toFixed(2)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                alert('Error al cargar pedidos. ¿Está el servidor corriendo?');
+            }
+        }
+        cargarPedidos();
+    </script>
+</body>
+</html>

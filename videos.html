@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ZP Videos | Zona Pixel</title>
+    <meta name="description" content="Explora películas, series, anime, dibujos animados, reality shows y novelas en ZP Videos.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="videos.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <h1 class="header-title">Zona Pixel</h1>
+            <img src="img/logopequeño.png" alt="Logo Zona Pixel" class="logoZona" width="48" height="48" loading="lazy">
+        </div>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menú" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav class="nav-menu" id="navMenu">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> INICIO</a></li>
+                <li><a href="marketplace.html"><i class="fas fa-store"></i> TIENDA</a></li>
+                <li><a href="videos.html" class="active"><i class="fas fa-play-circle"></i> ZP VIDEOS</a></li>
+                <li><a href="index.html#impresiones"><i class="fas fa-print"></i> IMPRESIONES & IA</a></li>
+                <li><a href="index.html#edicion"><i class="fas fa-video"></i> EDICION DE VIDEO</a></li>
+                <li><a href="index.html#grabacion"><i class="fas fa-camera"></i> GRABACION</a></li>
+                <li><a href="index.html#venta-audiovisuales"><i class="fas fa-play-circle"></i> AUDIOVISUALES</a></li>
+                <li><a href="index.html#contacto"><i class="fas fa-envelope"></i> CONTACTO</a></li>
+            </ul>
+        </nav>           
+    </header>
+
+    <main class="videos-main">
+        <div class="container">
+            <div class="videos-header">
+                <div class="descargar-container" >    
+                    <div class="descargar">
+                        <button id="syncBtn" class="refresh-btn"><i class="fas fa-cloud-download-alt"></i> Sincronizar todo (offline)</button>
+                        <div id="progressContainer" style="display: none; flex:1;">
+                            <span id="progressText">Descargando...</span>
+                            <progress id="progressBar" value="0" max="100" style="width:100%; height:20px;"></progress>
+                        </div>
+                    </div>
+                </div>   
+
+                <h1 class="section-title"><i class="fas fa-clapperboard"></i> ZP Videos</h1>
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por título, año o calificación..." class="search-input">
+                </div>
+                
+                <!-- BARRA DE FILTROS ADICIONALES -->
+                <div class="filters-bar">
+                    <input type="number" id="filterYear" placeholder="Año exacto (ej. 2023)" class="filter-input">
+                    <select id="filterRating" class="filter-select">
+                        <option value="0">⭐ Calificación mínima</option>
+                        <option value="5">★ 5+</option>
+                        <option value="6">★ 6+</option>
+                        <option value="7">★ 7+</option>
+                        <option value="8">★ 8+</option>
+                        <option value="9">★ 9+</option>
+                    </select>
+                    <button id="clearFiltersBtn" class="filter-clear"><i class="fas fa-eraser"></i> Limpiar</button>
+                </div>
+            </div>
+
+            <div class="category-tabs">
+                <button class="category-btn active" data-category="all">Todos</button>
+                <button class="category-btn" data-category="peliculas"><i class="fas fa-film"></i> Películas</button>
+                <button class="category-btn" data-category="series"><i class="fas fa-tv"></i> Series</button>
+                <button class="category-btn" data-category="anime"><i class="fas fa-dragon"></i> Anime</button>
+                <button class="category-btn" data-category="munes"><i class="fas fa-child"></i> Muñes</button>
+                <button class="category-btn" data-category="reality"><i class="fas fa-users"></i> Reality Shows</button>
+                <button class="category-btn" data-category="novelas"><i class="fas fa-heart"></i> Novelas</button>
+                <button class="category-btn" data-category="favorites"><i class="fas fa-heart"></i> Favoritos</button>
+            </div>
+
+            <div id="videosSectionsContainer"></div>
+        </div>
+    </main>
+
+    <!-- Paginación fija inferior -->
+    <div id="fixedPagination" class="fixed-pagination" style="display: none;"></div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Zona Pixel - Todos los derechos reservados</p>
+            <p>📧 zonapixel01@gmail.com | 📍 Dirección: Calle calzada, Local 4, Cárdenas</p>
+        </div>
+    </footer>
+
+    <!-- Modal de detalle -->
+    <div id="videoDetailModal" class="modal video-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body video-modal-body">
+                <div class="modal-poster">
+                    <img id="modalPoster" src="" alt="">
+                </div>
+                <div class="modal-info">
+                    <h2 id="modalTitle"></h2>
+                    <p class="modal-meta">
+                        <span id="modalYear"></span> · 
+                        <span id="modalCategory"></span> · 
+                        <span id="modalRating"></span>
+                    </p>
+                    <p id="modalOverview" class="modal-description"></p>
+                    <button id="modalFavBtn" class="fav-btn">
+                        <i class="far fa-heart"></i> Agregar a Favoritos
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+    <script src="sync-manager.js" type="module"></script>
+    <script src="videos.js" type="module"></script>
+</body>
+</html>
